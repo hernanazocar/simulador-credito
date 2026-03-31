@@ -378,7 +378,8 @@ input[type=date]{color-scheme:dark;font-size:14px;}
     </div>
     <div class="sc-section">Desglose del plan de pago</div>
     <div class="sc-rows" id="sc-rows"></div>
-    <div class="sc-nota">🌿 La reserva de $250.000 se descuenta del pie al momento de la firma. Valores referenciales sujetos a condiciones comerciales vigentes.</div>
+    <div class="sc-nota">🌿 La reserva de <span id="sc-nota-reserva">$250.000</span> se descuenta del pie al momento de la firma. Valores referenciales sujetos a condiciones comerciales vigentes.</div>
+    <div class="sc-nota">📌 Valores referenciales. Corresponde a una compraventa con precio pactado y facilidades de pago directas, no constituyendo un crédito ni operación financiera.</div>
     <div class="sc-footer">simulador-ichicureo.netlify.app · Inmobiliaria Chicureo · A2 Capital</div>
   </div>
 </div>
@@ -489,12 +490,13 @@ function poblarCard(){
   var rows=[
     ["Precio de la parcela",fmtCLP(d.precio),""],
     ["Pie ("+d.piePct.toFixed(1).replace(".",",")+"%)",fmtCLP(d.pie),""],
-    ["Reserva (descuento del pie)","− "+fmtCLP(RESERVA),"g"],
+    ["Reserva (descuento del pie)","− "+fmtCLP(d.reserva),"g"],
     ["Saldo del pie a pagar",fmtCLP(d.saldoPie),""],
     ["Saldo en cuotas",fmtCLP(d.monto),""]
   ];
   var rh="";for(var j=0;j<rows.length;j++)rh+='<div class="sc-row"><span class="sl">'+rows[j][0]+'</span><span class="sv '+rows[j][2]+'">'+rows[j][1]+'</span></div>';
   document.getElementById("sc-rows").innerHTML=rh;
+  document.getElementById("sc-nota-reserva").textContent=fmtCLP(d.reserva);
 }
 
 function generarImagen(cb){
