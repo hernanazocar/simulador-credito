@@ -387,11 +387,12 @@ input[type=date]{color-scheme:dark;font-size:14px;}
 var RESERVA=250000, PIE_MIN=10;
 var reservaRaw="250000";
 var FACTORES=[
+  {desde:2,hasta:3,factor:0.022},
   {desde:4,hasta:6,factor:0.022},
   {desde:7,hasta:12,factor:0.025},
   {desde:13,hasta:36,factor:0.027}
 ];
-var CUOTAS_OP=[4,6,8,10,12,18,24,36];
+var CUOTAS_OP=[2,4,6,8,10,12,18,24,36];
 var precioRaw="",pieRaw="30",pieMode="pct",cuotas=12;
 var proyecto="",parcela="",fecha="",nombreCliente="";
 var lastBlob=null;
