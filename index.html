@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Facilidades de Pago – Inmobiliaria Chicureo</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{min-height:100%;}
+body{background:linear-gradient(160deg,#edfbf0 0%,#d4f5e0 50%,#bbeed0 100%);font-family:'Inter',sans-serif;color:#14532d;min-height:100vh;overflow-x:hidden;}
+.orb1,.orb2{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;}
+.orb1{width:500px;height:500px;background:radial-gradient(circle,#16a34a18,transparent 70%);top:-100px;right:-100px;}
+.orb2{width:400px;height:400px;background:radial-gradient(circle,#15803d14,transparent 70%);bottom:100px;left:-100px;}
+.wrap{max-width:540px;margin:0 auto;padding:0 16px 100px;position:relative;z-index:1;}
+
+/* HEADER */
+.hdr{padding:36px 0 28px;text-align:center;}
+.logo-row{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:20px;}
+.logo-chip{background:#fff;border-radius:10px;padding:7px 14px;font-size:12px;font-weight:800;color:#14532d;box-shadow:0 2px 12px rgba(22,163,74,.15);}
+.logo-chip .g{color:#16a34a;}.logo-chip .a{color:#d97706;}
+.hdr-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(22,163,74,.1);border:1px solid rgba(22,163,74,.3);border-radius:30px;padding:6px 16px;font-size:11px;font-weight:600;color:#16a34a;letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px;}
+.dot{width:6px;height:6px;border-radius:50%;background:#16a34a;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.7);}}
+.hdr h1{font-size:30px;font-weight:800;letter-spacing:-1px;line-height:1.1;color:#14532d;}
+.hdr h1 span{background:linear-gradient(135deg,#16a34a,#d97706);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hdr-sub{font-size:13px;color:#3d7a55;margin-top:8px;line-height:1.6;}
+
+/* CARDS */
+.glass{background:#16a34a;border:1px solid rgba(22,163,74,.3);border-radius:24px;overflow:hidden;margin-bottom:12px;box-shadow:0 4px 24px rgba(22,163,74,.2);position:relative;}
+.glass::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);}
+.sec{padding:22px 20px 18px;}
+.sec-hdr{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
+.sec-icon{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.sec-icon.gold{background:rgba(217,119,6,.25);}
+.sec-title{font-size:14px;font-weight:700;color:#fff;}
+.sec-sub{font-size:12px;color:rgba(255,255,255,.6);}
+
+/* INPUTS */
+.fld{margin-bottom:13px;}
+.flbl{font-size:11px;font-weight:600;color:rgba(255,255,255,.65);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;display:block;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:13px;}
+input[type=text],input[type=date],input[type=email]{width:100%;padding:13px 16px;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.28);border-radius:13px;color:#fff;font-size:15px;font-family:'Inter',sans-serif;font-weight:500;outline:none;-webkit-appearance:none;transition:all .2s;}
+input:focus{border-color:rgba(255,255,255,.8);background:rgba(255,255,255,.25);box-shadow:0 0 0 3px rgba(255,255,255,.12);}
+input::placeholder{color:rgba(255,255,255,.3);font-weight:400;}
+input[type=date]{color-scheme:dark;font-size:14px;}
+.inpw{position:relative;}
+.pfx,.sfx{position:absolute;top:50%;transform:translateY(-50%);font-size:14px;font-weight:700;pointer-events:none;color:rgba(255,255,255,.8);}
+.pfx{left:14px;}.sfx{right:14px;}
+.pie-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.tgl{display:flex;background:rgba(0,0,0,.2);border-radius:10px;padding:3px;gap:3px;border:1px solid rgba(255,255,255,.15);}
+.tb{padding:6px 16px;border-radius:8px;border:none;background:transparent;color:rgba(255,255,255,.45);font-size:13px;font-family:'Inter',sans-serif;font-weight:700;cursor:pointer;transition:all .2s;}
+.tb.on{background:#fff;color:#16a34a;}
+.equiv{margin-top:5px;font-size:12px;color:rgba(255,255,255,.7);font-weight:500;min-height:16px;}
+.alerta{padding:10px 14px;background:rgba(239,68,68,.2);border-radius:10px;border-left:3px solid #ef4444;margin-top:8px;font-size:12px;color:#fecaca;display:none;}
+
+/* CUOTAS */
+.cuotas-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.cuotas-row label{font-size:11px;font-weight:600;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.06em;}
+.cuotas-badge{background:#fff;color:#16a34a;font-weight:800;font-size:16px;padding:4px 16px;border-radius:20px;}
+.cgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;}
+.cb{padding:12px 0;border-radius:12px;border:1.5px solid rgba(255,255,255,.18);background:rgba(255,255,255,.1);color:rgba(255,255,255,.55);font-size:14px;font-family:'Inter',sans-serif;font-weight:700;cursor:pointer;text-align:center;-webkit-appearance:none;transition:all .2s;}
+.cb:hover{border-color:rgba(255,255,255,.55);color:#fff;}
+.cb.on{background:#fff;border-color:#fff;color:#16a34a;}
+
+/* RESULTADOS */
+.ph{padding:32px 20px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;}
+.ph-ring{width:60px;height:60px;border-radius:50%;border:2px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:22px;}
+.ph-txt{font-size:14px;color:rgba(255,255,255,.65);font-weight:500;}
+
+/* HERO */
+.hero-wrap{margin-bottom:14px;background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.2);border-radius:18px;padding:22px 20px;position:relative;overflow:hidden;}
+.hero-wrap::after{content:'';position:absolute;bottom:-24px;right:-24px;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.07),transparent 70%);}
+.hero-lbl{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:6px;}
+.hero-val{font-size:46px;font-weight:800;letter-spacing:-2px;color:#fff;line-height:1;}
+.hero-sub{font-size:12px;color:rgba(255,255,255,.55);margin-top:6px;}
+
+/* MÉTRICAS */
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.metric{background:rgba(0,0,0,.15);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:13px 15px;position:relative;overflow:hidden;}
+.metric::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:2px 2px 0 0;}
+.metric.mg::before{background:linear-gradient(90deg,#fff,transparent);}
+.metric.mo::before{background:linear-gradient(90deg,#fcd34d,transparent);}
+.metric-lbl{font-size:10px;font-weight:600;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;}
+.metric-val{font-size:17px;font-weight:800;color:#fff;}
+.metric-val.o{color:#fcd34d;}
+
+/* DETALLE */
+.detail{background:rgba(0,0,0,.15);border:1px solid rgba(255,255,255,.1);border-radius:14px;overflow:hidden;margin-bottom:14px;}
+.detail-title{padding:10px 15px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5);border-bottom:1px solid rgba(255,255,255,.07);}
+.rrow{display:flex;justify-content:space-between;align-items:center;padding:10px 15px;border-bottom:1px solid rgba(255,255,255,.05);}
+.rrow:last-child{border-bottom:none;}
+.rl{font-size:13px;color:rgba(255,255,255,.6);font-weight:500;}
+.rv{font-size:13px;font-weight:700;color:#fff;}
+.rv.g{color:#bbf7d0;}
+
+.nota{padding:12px 15px;background:rgba(0,0,0,.12);border:1px solid rgba(255,255,255,.12);border-radius:12px;font-size:12px;color:rgba(255,255,255,.7);line-height:1.6;margin-bottom:14px;}
+
+/* BOTONES */
+.acts{display:flex;flex-direction:column;gap:9px;margin-top:4px;}
+.abtn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:16px 20px;border-radius:15px;font-size:14px;font-family:'Inter',sans-serif;font-weight:700;cursor:pointer;border:none;transition:transform .15s,opacity .15s;position:relative;overflow:hidden;}
+.abtn:active{transform:scale(.97);opacity:.88;}
+.abtn:disabled{opacity:.4;cursor:not-allowed;}
+.abtn-ic{font-size:16px;}
+.bwsp{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;box-shadow:0 4px 18px rgba(34,197,94,.3);}
+.bmail{background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;box-shadow:0 4px 18px rgba(59,130,246,.25);}
+.bdl{background:rgba(255,255,255,.15);color:#fff;border:1.5px solid rgba(255,255,255,.32)!important;}
+.bpdf{background:rgba(0,0,0,.15);color:rgba(255,255,255,.65);border:1.5px solid rgba(255,255,255,.15)!important;}
+.bnueva{background:rgba(255,255,255,.1);color:#fff;border:1.5px solid rgba(255,255,255,.25)!important;}
+
+.footer{margin-top:22px;text-align:center;font-size:11px;color:#3d7a55;line-height:1.8;}
+
+/* HISTORIAL */
+.hist-section{margin-top:12px;}
+.hist-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.hist-title{font-size:13px;font-weight:700;color:#14532d;}
+.hist-clear{font-size:11px;font-weight:600;color:#16a34a;background:rgba(22,163,74,.1);border:none;cursor:pointer;padding:4px 10px;border-radius:20px;}
+.hist-empty{text-align:center;padding:20px;font-size:13px;color:#3d7a55;background:#fff;border-radius:16px;border:1.5px dashed rgba(22,163,74,.25);}
+.hist-card{background:#16a34a;border-radius:16px;padding:14px 16px;margin-bottom:8px;cursor:pointer;border:1px solid rgba(255,255,255,.15);box-shadow:0 2px 12px rgba(22,163,74,.2);transition:transform .15s;position:relative;overflow:hidden;}
+.hist-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);}
+.hist-card:active{transform:scale(.98);}
+.hist-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+.hist-card-name{font-size:14px;font-weight:700;color:#fff;}
+.hist-card-date{font-size:11px;color:rgba(255,255,255,.5);}
+.hist-card-cuota{font-size:22px;font-weight:800;color:#fff;letter-spacing:-.5px;margin-bottom:4px;}
+.hist-card-sub{font-size:11px;color:rgba(255,255,255,.6);}
+.hist-card-pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.hist-pill{font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;background:rgba(0,0,0,.2);color:rgba(255,255,255,.75);}
+.hist-pill.gold{background:rgba(217,119,6,.25);color:#fcd34d;}
+.hist-card-del{position:absolute;top:10px;right:12px;background:rgba(0,0,0,.2);border:none;color:rgba(255,255,255,.5);font-size:14px;width:26px;height:26px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.hist-restore-hint{font-size:10px;color:rgba(255,255,255,.4);margin-top:6px;font-style:italic;}
+
+/* MODAL PREVIEW */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:999;align-items:flex-end;justify-content:center;}
+.modal-bg.show{display:flex;}
+.modal-box{background:linear-gradient(160deg,#16a34a,#15803d);border:1px solid rgba(255,255,255,.2);border-radius:26px 26px 0 0;padding:24px 18px 36px;width:100%;max-width:540px;}
+.modal-handle{width:40px;height:4px;background:rgba(255,255,255,.25);border-radius:2px;margin:0 auto 18px;}
+.modal-title{font-size:16px;font-weight:800;color:#fff;margin-bottom:6px;}
+.modal-sub{font-size:12px;color:rgba(255,255,255,.6);margin-bottom:16px;}
+.modal-img-wrap{border-radius:14px;overflow:hidden;background:rgba(0,0,0,.2);margin-bottom:16px;}
+.modal-img-wrap img{width:100%;display:block;}
+.modal-btns{display:flex;flex-direction:column;gap:9px;}
+.mbtn{width:100%;padding:15px;border-radius:13px;font-size:14px;font-family:'Inter',sans-serif;font-weight:700;cursor:pointer;border:none;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .15s;}
+.mbtn:active{transform:scale(.97);}
+.mbtn-wsp{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;}
+.mbtn-mail{background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;}
+.mbtn-dl{background:rgba(255,255,255,.15);color:#fff;border:1.5px solid rgba(255,255,255,.3)!important;}
+.mbtn-close{background:rgba(0,0,0,.2);color:rgba(255,255,255,.65);}
+
+/* MODAL EMAIL */
+.modal-email-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;align-items:flex-end;justify-content:center;}
+.modal-email-bg.show{display:flex;}
+.modal-email-box{background:linear-gradient(160deg,#16a34a,#15803d);border:1px solid rgba(255,255,255,.2);border-radius:26px 26px 0 0;padding:24px 18px 38px;width:100%;max-width:540px;}
+.modal-email-box label{font-size:11px;font-weight:600;color:rgba(255,255,255,.6);display:block;margin-bottom:6px;margin-top:14px;letter-spacing:.06em;text-transform:uppercase;}
+.email-btns{display:flex;gap:9px;margin-top:18px;}
+.email-btns button{flex:1;padding:15px;border-radius:13px;font-size:14px;font-family:'Inter',sans-serif;font-weight:700;cursor:pointer;border:none;}
+.ebtn-send{background:#fff;color:#16a34a;}
+.ebtn-cancel{background:rgba(0,0,0,.2);color:rgba(255,255,255,.65);}
+
+/* TOAST */
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(10px);background:#15803d;border:1px solid rgba(255,255,255,.3);color:#fff;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;padding:13px 24px;border-radius:30px;z-index:9999;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 28px rgba(22,163,74,.4);}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* TARJETA EXPORTABLE */
+#sim-card{position:fixed;left:-9999px;top:0;width:680px;font-family:'Inter',sans-serif;background:linear-gradient(160deg,#16a34a 0%,#15803d 50%,#166534 100%);padding:0;border-radius:0;overflow:hidden;}
+.sc-header{background:rgba(0,0,0,.25);padding:28px 32px 22px;display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid rgba(255,255,255,.12);}
+.sc-brand{color:#fff;}
+.sc-brand-name{font-size:24px;font-weight:900;letter-spacing:-.5px;}
+.sc-brand-name span{color:#bbf7d0;}
+.sc-brand-sub{font-size:12px;color:rgba(255,255,255,.55);margin-top:3px;}
+.sc-logo-box{background:#fff;border-radius:10px;padding:8px 14px;text-align:right;}
+.sc-logo-box .l1{font-size:13px;font-weight:800;color:#14532d;}
+.sc-logo-box .l2{font-size:11px;font-weight:700;color:#d97706;}
+.sc-meta{display:flex;flex-wrap:wrap;gap:0;background:rgba(0,0,0,.15);border-bottom:1px solid rgba(255,255,255,.08);}
+.sc-meta-item{flex:1;min-width:150px;padding:14px 20px;border-right:1px solid rgba(255,255,255,.08);}
+.sc-meta-item:last-child{border-right:none;}
+.sc-meta-lbl{font-size:9px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;}
+.sc-meta-val{font-size:14px;font-weight:700;color:#fff;}
+.sc-body{padding:24px 32px;}
+.sc-hero{background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.18);border-radius:16px;padding:20px 24px;margin-bottom:18px;}
+.sc-hero-lbl{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:6px;}
+.sc-hero-val{font-size:46px;font-weight:900;color:#fff;letter-spacing:-2px;line-height:1;}
+.sc-hero-sub{font-size:12px;color:rgba(255,255,255,.5);margin-top:6px;}
+.sc-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;}
+.sc-stat{background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 16px;}
+.sc-stat-lbl{font-size:9px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;}
+.sc-stat-val{font-size:20px;font-weight:800;color:#fff;}
+.sc-stat-val.o{color:#fcd34d;}
+.sc-section{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:8px;}
+.sc-rows{background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.08);border-radius:12px;overflow:hidden;margin-bottom:16px;}
+.sc-row{display:flex;justify-content:space-between;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.05);font-size:13px;}
+.sc-row:last-child{border-bottom:none;}
+.sc-row .sl{color:rgba(255,255,255,.55);font-weight:500;}
+.sc-row .sv{font-weight:700;color:#fff;}
+.sc-row .sv.g{color:#bbf7d0;}
+.sc-nota{padding:12px 16px;background:rgba(0,0,0,.12);border:1px solid rgba(255,255,255,.1);border-radius:10px;font-size:11px;color:rgba(255,255,255,.6);line-height:1.5;margin-bottom:14px;}
+.sc-footer{text-align:center;font-size:10px;color:rgba(255,255,255,.3);padding-bottom:24px;}
+
+@media print{body{background:#d4f5e0!important;}.acts,.footer{display:none!important;}}
+</style>
+</head>
+<body>
+<div class="orb1"></div><div class="orb2"></div>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="hdr">
+    <div class="logo-row">
+      <div class="logo-chip"><span class="g">Inmobiliaria</span> Chicureo &nbsp;·&nbsp; <span class="a">A2</span> Capital</div>
+    </div>
+    <div class="hdr-tag"><span class="dot"></span>Simulador en vivo</div>
+    <h1>Tu parcela,<br><span>a tu alcance</span></h1>
+    <p class="hdr-sub">Facilidades de pago directo · Sin banco · Sin trámites</p>
+  </div>
+
+  <!-- PROYECTO -->
+  <div class="glass">
+    <div class="sec">
+      <div class="sec-hdr">
+        <div class="sec-icon">🌳</div>
+        <div><div class="sec-title">Datos del proyecto</div><div class="sec-sub">Información del inmueble y cliente</div></div>
+      </div>
+      <div class="fld"><label class="flbl">Proyecto</label><input type="text" id="iproyecto" placeholder="Ej: Parcelas Los Aromos" autocomplete="off"></div>
+      <div class="row2">
+        <div><label class="flbl">N° Unidad</label><input type="text" id="iparcela" placeholder="P-042" autocomplete="off"></div>
+        <div><label class="flbl">Fecha</label><input type="date" id="ifecha"></div>
+      </div>
+      <div class="fld"><label class="flbl">Cliente</label><input type="text" id="inombre" placeholder="Nombre completo" autocomplete="off"></div>
+      <div class="fld" style="margin-bottom:0">
+        <label class="flbl">Reserva</label>
+        <div class="inpw"><span class="pfx">$</span><input type="text" id="ireserva" inputmode="numeric" placeholder="250.000" style="padding-left:28px;" autocomplete="off"></div>
+        <p class="equiv" style="color:rgba(255,255,255,.55);">Se descuenta del pie al momento de la firma</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINANCIAMIENTO -->
+  <div class="glass">
+    <div class="sec">
+      <div class="sec-hdr">
+        <div class="sec-icon gold">💰</div>
+        <div><div class="sec-title">Plan de pago</div><div class="sec-sub">Precio, pie y cuotas mensuales</div></div>
+      </div>
+      <div class="fld"><label class="flbl">Precio de la parcela</label>
+        <div class="inpw"><span class="pfx">$</span><input type="text" id="iprecio" inputmode="numeric" placeholder="50.000.000" style="padding-left:28px;" autocomplete="off"></div>
+      </div>
+      <div class="fld">
+        <div class="pie-hdr"><label class="flbl" style="margin:0">Pie inicial</label>
+          <div class="tgl"><button class="tb on" id="bpct" type="button">%</button><button class="tb" id="bmonto" type="button">$</button></div>
+        </div>
+        <div class="inpw"><span class="pfx" id="pfxpie" style="display:none">$</span><input type="text" id="ipie" inputmode="decimal" placeholder="30" autocomplete="off"><span class="sfx" id="sfxpie">%</span></div>
+        <p class="equiv" id="equiv"></p>
+        <div class="alerta" id="alerta"></div>
+      </div>
+      <div class="fld" style="margin-bottom:0">
+        <div class="cuotas-row"><label class="flbl" style="margin:0">Cuotas mensuales</label><div class="cuotas-badge" id="cnum">12</div></div>
+        <div class="cgrid" id="cgrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTADOS -->
+  <div class="glass">
+    <div class="sec">
+      <div class="ph" id="ph"><div class="ph-ring">🌿</div><div class="ph-txt">Ingresa el precio para simular</div></div>
+      <div id="rc" style="display:none">
+
+        <div class="hero-wrap">
+          <div class="hero-lbl">Cuota mensual estimada</div>
+          <div class="hero-val" id="hval">—</div>
+          <div class="hero-sub" id="hsub">—</div>
+        </div>
+
+        <div class="metrics">
+          <div class="metric mg"><div class="metric-lbl">Total en cuotas</div><div class="metric-val" id="tval">—</div></div>
+          <div class="metric mo"><div class="metric-lbl">Saldo en cuotas</div><div class="metric-val o" id="mval">—</div></div>
+        </div>
+
+        <div style="background:rgba(0,0,0,.22);border:1.5px solid rgba(255,255,255,.3);border-radius:16px;padding:16px 20px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;">Valor total de la operación</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.4);">Pie + total en cuotas</div>
+          </div>
+          <div style="font-size:26px;font-weight:900;color:#fff;letter-spacing:-.5px;" id="total-op">—</div>
+        </div>
+
+        <div class="detail">
+          <div class="detail-title">📋 Desglose del plan de pago</div>
+          <div id="rrows"></div>
+        </div>
+
+        <div class="nota">🌿 La reserva de <strong id="nota-reserva">$250.000</strong> se descuenta del pie al momento de la firma. Valores referenciales sujetos a condiciones comerciales vigentes.</div>
+
+        <div class="acts">
+          <button class="abtn bwsp" id="bwsp" type="button"><span class="abtn-ic">💬</span>Compartir por WhatsApp</button>
+          <button class="abtn bmail" id="bmail" type="button"><span class="abtn-ic">✉️</span>Enviar por Correo</button>
+          <button class="abtn bdl" id="bdl" type="button"><span class="abtn-ic">⬇️</span>Descargar imagen</button>
+          <button class="abtn bpdf" type="button" onclick="window.print()"><span class="abtn-ic">🖨️</span>Imprimir / PDF</button>
+          <button class="abtn bnueva" id="bnueva" type="button"><span class="abtn-ic">🔁</span>Nueva simulación</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">Inmobiliaria Chicureo · A2 Capital<br>Simulación referencial · Facilidad de pago directa</div>
+
+  <!-- HISTORIAL -->
+  <div class="hist-section" id="hist-section">
+    <div class="hist-header">
+      <div class="hist-title">📋 Historial de simulaciones</div>
+      <button class="hist-clear" id="hist-clear">Limpiar todo</button>
+    </div>
+    <div id="hist-list"><div class="hist-empty">Aún no hay simulaciones guardadas.<br>Completa una simulación para guardarla aquí.</div></div>
+  </div>
+</div>
+
+<!-- MODAL PREVIEW -->
+<div class="modal-bg" id="modal-preview">
+  <div class="modal-box">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Vista previa de tu simulación</div>
+    <div class="modal-sub">Imagen lista para compartir con el cliente</div>
+    <div class="modal-img-wrap"><img id="preview-img" src="" alt="Simulación"></div>
+    <div class="modal-btns">
+      <button class="mbtn mbtn-wsp" id="mbtn-wsp"><span>💬</span>Compartir por WhatsApp</button>
+      <button class="mbtn mbtn-mail" id="mbtn-mail"><span>✉️</span>Adjuntar al correo</button>
+      <button class="mbtn mbtn-dl" id="mbtn-dl"><span>⬇️</span>Descargar imagen</button>
+      <button class="mbtn mbtn-close" id="mbtn-close">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EMAIL -->
+<div class="modal-email-bg" id="modal-email">
+  <div class="modal-email-box">
+    <div class="modal-handle"></div>
+    <div style="font-size:16px;font-weight:800;color:#fff;margin-bottom:4px;">✉️ Enviar por correo</div>
+    <div style="font-size:12px;color:rgba(255,255,255,.55);margin-bottom:4px;">La imagen se descargará para adjuntarla</div>
+    <label>Correo del cliente</label>
+    <input type="email" id="email-cliente" placeholder="cliente@ejemplo.com">
+    <label>Tu correo (copia)</label>
+    <input type="email" id="email-remitente" placeholder="ejecutivo@chicureo.cl">
+    <div class="email-btns">
+      <button class="ebtn-cancel" id="email-cancel">Cancelar</button>
+      <button class="ebtn-send" id="email-send">Abrir correo ✉️</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- TARJETA EXPORTABLE -->
+<div id="sim-card">
+  <div class="sc-header">
+    <div class="sc-brand">
+      <div class="sc-brand-name">Inmobiliaria <span>Chicureo</span></div>
+      <div class="sc-brand-sub">Plan de facilidades de pago directo</div>
+    </div>
+    <div class="sc-logo-box"><div class="l1">A2 Capital</div><div class="l2">Inmobiliaria Chicureo</div></div>
+  </div>
+  <div class="sc-meta" id="sc-meta"></div>
+  <div class="sc-body">
+    <div class="sc-hero">
+      <div class="sc-hero-lbl">Cuota mensual estimada</div>
+      <div class="sc-hero-val" id="sc-hval">—</div>
+      <div class="sc-hero-sub" id="sc-hsub">—</div>
+    </div>
+    <div class="sc-stats">
+      <div class="sc-stat"><div class="sc-stat-lbl">Total en cuotas</div><div class="sc-stat-val" id="sc-tval">—</div></div>
+      <div class="sc-stat"><div class="sc-stat-lbl">Valor por cuota</div><div class="sc-stat-val o" id="sc-mval">—</div></div>
+    </div>
+    <div style="background:rgba(0,0,0,.2);border:1.5px solid rgba(255,255,255,.22);border-radius:13px;padding:14px 18px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;">
+      <div><div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;">Valor total de la operación</div><div style="font-size:11px;color:rgba(255,255,255,.35);">Pie + total en cuotas</div></div>
+      <div style="font-size:24px;font-weight:900;color:#fff;letter-spacing:-.5px;" id="sc-total-op">—</div>
+    </div>
+    <div class="sc-section">Desglose del plan de pago</div>
+    <div class="sc-rows" id="sc-rows"></div>
+    <div class="sc-nota">🌿 La reserva de $250.000 se descuenta del pie al momento de la firma. Valores referenciales sujetos a condiciones comerciales vigentes.</div>
+    <div class="sc-footer">simulador-ichicureo.netlify.app · Inmobiliaria Chicureo · A2 Capital</div>
+  </div>
+</div>
+
+<script>
+var RESERVA=250000, PIE_MIN=10;
+var reservaRaw="250000";
+var FACTORES=[
+  {desde:4,hasta:6,factor:0.022},
+  {desde:7,hasta:12,factor:0.025},
+  {desde:13,hasta:36,factor:0.027}
+];
+var CUOTAS_OP=[4,6,8,10,12,18,24,36];
+var precioRaw="",pieRaw="30",pieMode="pct",cuotas=12;
+var proyecto="",parcela="",fecha="",nombreCliente="";
+var lastBlob=null;
+var historial=[];
+try{historial=JSON.parse(localStorage.getItem("sim_hist")||"[]");}catch(e){historial=[];}
+
+function fmt(n){n=Math.round(Math.abs(n||0));var s=""+n,r="",i=0;for(var j=s.length-1;j>=0;j--){if(i>0&&i%3===0)r="."+r;r=s[j]+r;i++;}return r;}
+function fmtCLP(n){return(n||n===0)?"$"+fmt(n):"—";}
+function parseN(s){if(!s)return 0;return parseInt((""+s).replace(/[^0-9]/g,""),10)||0;}
+function parsePct(s){return parseFloat((""+s).replace(",",".").replace(/[^0-9.]/g,""))||0;}
+function fmtFecha(f){if(!f)return "";var p=f.split("-");return p.length===3?p[2]+"/"+p[1]+"/"+p[0]:f;}
+function getF(n){for(var i=0;i<FACTORES.length;i++){if(n>=FACTORES[i].desde&&n<=FACTORES[i].hasta)return FACTORES[i];}return FACTORES[FACTORES.length-1];}
+function cuotaM(mo,r,n){if(!n||mo<=0)return 0;if(!r)return mo/n;return mo*r/(1-Math.pow(1+r,-n));}
+function showToast(msg,ms){var t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(function(){t.classList.remove("show");},ms||2800);}
+
+function calc(){
+  var precio=parseN(precioRaw);
+  var reserva=parseN(reservaRaw)||250000;
+  var pieMin=Math.round(precio*PIE_MIN/100);
+  var pie=pieMode==="pct"?Math.round(precio*parsePct(pieRaw)/100):parseN(pieRaw);
+  var piePct=precio>0?pie/precio*100:0;
+  var saldoPie=Math.max(0,pie-reserva);
+  var monto=Math.max(0,precio-pie);
+  var f=getF(cuotas);
+  var cuota=cuotaM(monto,f.factor,cuotas);
+  var total=cuota*cuotas+pie;
+  return{precio,pie,piePct,saldoPie,monto,cuota,total,f,pieMin,ok:pie>=pieMin,reserva};
+}
+
+function update(){
+  var d=calc();
+  document.getElementById("bpct").className="tb"+(pieMode==="pct"?" on":"");
+  document.getElementById("bmonto").className="tb"+(pieMode==="monto"?" on":"");
+  document.getElementById("pfxpie").style.display=pieMode==="monto"?"":"none";
+  document.getElementById("sfxpie").style.display=pieMode==="pct"?"":"none";
+  document.getElementById("ipie").style.paddingLeft=pieMode==="monto"?"28px":"15px";
+  document.getElementById("ipie").style.paddingRight=pieMode==="pct"?"32px":"15px";
+  for(var i=0;i<CUOTAS_OP.length;i++){var b=document.getElementById("cb"+CUOTAS_OP[i]);if(b)b.className="cb"+(CUOTAS_OP[i]===cuotas?" on":"");}
+  document.getElementById("cnum").textContent=cuotas;
+  var eq=document.getElementById("equiv");
+  if(d.precio>0&&d.pie>0)eq.textContent=pieMode==="pct"?"= "+fmtCLP(d.pie):"= "+d.piePct.toFixed(1).replace(".",",")+"%";
+  else eq.textContent="";
+  var al=document.getElementById("alerta");
+  if(!d.ok&&d.precio>0&&d.pie>0){al.textContent="⚠️ El pie mínimo es el 10% del precio ("+fmtCLP(d.pieMin)+")";al.style.display="";}
+  else al.style.display="none";
+  var ph=document.getElementById("ph"),rc=document.getElementById("rc");
+  if(!d.precio){ph.style.display="";rc.style.display="none";return;}
+  ph.style.display="none";rc.style.display="";
+  var data=[
+    ["Precio con descuento pago contado",fmtCLP(d.precio),""],
+    ["Pie ("+d.piePct.toFixed(1).replace(".",",")+"%)",fmtCLP(d.pie),""],
+    ["Reserva (descuento del pie)","− "+fmtCLP(d.reserva),"g"],
+    ["Saldo del pie a pagar",fmtCLP(d.saldoPie),""],
+    ["Saldo en cuotas",fmtCLP(d.monto),""]
+  ];
+  var html="";for(var j=0;j<data.length;j++)html+='<div class="rrow"><span class="rl">'+data[j][0]+'</span><span class="rv '+data[j][2]+'">'+data[j][1]+'</span></div>';
+  document.getElementById("rrows").innerHTML=html;
+  document.getElementById("hval").textContent=fmtCLP(d.cuota);
+  document.getElementById("hsub").textContent=cuotas+" cuotas mensuales";
+  document.getElementById("nota-reserva").textContent=fmtCLP(d.reserva);
+  document.getElementById("tval").textContent=fmtCLP(Math.round(d.cuota*cuotas));  document.getElementById("mval").textContent=fmtCLP(d.monto);
+  document.getElementById("total-op").textContent=fmtCLP(d.pie+Math.round(d.cuota*cuotas));
+}
+
+function initGrid(){
+  var g=document.getElementById("cgrid");g.innerHTML="";
+  for(var i=0;i<CUOTAS_OP.length;i++){
+    (function(n){var b=document.createElement("button");b.type="button";b.id="cb"+n;b.className="cb"+(n===cuotas?" on":"");b.textContent=n;b.addEventListener("click",function(){cuotas=n;update();});g.appendChild(b);})(CUOTAS_OP[i]);
+  }
+}
+
+function setMode(m){
+  if(m===pieMode)return;
+  var precio=parseN(precioRaw),inp=document.getElementById("ipie");
+  if(m==="monto"){var mo=Math.round(precio*parsePct(pieRaw)/100);pieRaw=mo>0?""+mo:"";inp.value=mo>0?fmt(mo):"";inp.placeholder="15.000.000";inp.setAttribute("inputmode","numeric");}
+  else{var mv=parseN(pieRaw),pc=precio>0?Math.round(mv/precio*100):0;pieRaw=pc>0?""+pc:"";inp.value=pieRaw;inp.placeholder="30";inp.setAttribute("inputmode","decimal");}
+  pieMode=m;update();
+}
+
+function poblarCard(){
+  var d=calc();
+  var meta=[];
+  if(nombreCliente)meta.push('<div class="sc-meta-item"><div class="sc-meta-lbl">Cliente</div><div class="sc-meta-val">'+nombreCliente+'</div></div>');
+  if(proyecto)meta.push('<div class="sc-meta-item"><div class="sc-meta-lbl">Proyecto</div><div class="sc-meta-val">'+proyecto+'</div></div>');
+  if(parcela)meta.push('<div class="sc-meta-item"><div class="sc-meta-lbl">Unidad</div><div class="sc-meta-val">'+parcela+'</div></div>');
+  if(fecha)meta.push('<div class="sc-meta-item"><div class="sc-meta-lbl">Fecha</div><div class="sc-meta-val">'+fmtFecha(fecha)+'</div></div>');
+  if(!meta.length)meta.push('<div class="sc-meta-item"><div class="sc-meta-lbl">Simulación</div><div class="sc-meta-val">Inmobiliaria Chicureo</div></div>');
+  document.getElementById("sc-meta").innerHTML=meta.join("");
+  document.getElementById("sc-hval").textContent=fmtCLP(d.cuota);
+  document.getElementById("sc-hsub").textContent=cuotas+" cuotas mensuales";
+  document.getElementById("sc-tval").textContent=fmtCLP(Math.round(d.cuota*cuotas));
+  document.getElementById("sc-mval").textContent=fmtCLP(d.cuota);
+  document.getElementById("sc-total-op").textContent=fmtCLP(d.pie+Math.round(d.cuota*cuotas));
+  var rows=[
+    ["Precio de la parcela",fmtCLP(d.precio),""],
+    ["Pie ("+d.piePct.toFixed(1).replace(".",",")+"%)",fmtCLP(d.pie),""],
+    ["Reserva (descuento del pie)","− "+fmtCLP(RESERVA),"g"],
+    ["Saldo del pie a pagar",fmtCLP(d.saldoPie),""],
+    ["Saldo en cuotas",fmtCLP(d.monto),""]
+  ];
+  var rh="";for(var j=0;j<rows.length;j++)rh+='<div class="sc-row"><span class="sl">'+rows[j][0]+'</span><span class="sv '+rows[j][2]+'">'+rows[j][1]+'</span></div>';
+  document.getElementById("sc-rows").innerHTML=rh;
+}
+
+function generarImagen(cb){
+  poblarCard();
+  html2canvas(document.getElementById("sim-card"),{backgroundColor:"#15803d",scale:2,useCORS:true,logging:false,width:680,windowWidth:680}).then(function(canvas){
+    canvas.toBlob(function(blob){lastBlob=blob;var url=URL.createObjectURL(blob);cb(null,url);},"image/png");
+  }).catch(function(e){cb(e,null);});
+}
+
+function abrirPreview(){
+  var d=calc();if(!d.precio){showToast("⚠️ Ingresa el precio primero");return;}
+  showToast("⏳ Generando imagen…",3500);
+  generarImagen(function(err,url){
+    if(err){showToast("❌ Error al generar imagen");return;}
+    document.getElementById("preview-img").src=url;
+    document.getElementById("modal-preview").classList.add("show");
+  });
+}
+
+function guardarHistorial(){
+  var d=calc();if(!d.precio)return;
+  var item={id:Date.now(),ts:new Date().toLocaleString("es-CL",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"}),proyecto,parcela,nombreCliente,fecha,precio:d.precio,pie:d.pie,piePct:d.piePct,monto:d.monto,cuotas,cuota:d.cuota,total:d.total,pieMode,pieRaw,precioRaw};
+  if(historial.length>0){var l=historial[0];if(l.precio===item.precio&&l.cuotas===item.cuotas&&l.pie===item.pie)return;}
+  historial.unshift(item);if(historial.length>6)historial=historial.slice(0,6);
+  try{localStorage.setItem("sim_hist",JSON.stringify(historial));}catch(e){}
+  renderHistorial();
+}
+
+function renderHistorial(){
+  var list=document.getElementById("hist-list");
+  if(!historial.length){list.innerHTML='<div class="hist-empty">Aún no hay simulaciones guardadas.<br>Completa una simulación para guardarla aquí.</div>';return;}
+  var html="";
+  historial.forEach(function(h){
+    var nombre=h.nombreCliente||h.proyecto||"Sin nombre";
+    html+='<div class="hist-card" data-id="'+h.id+'">'
+      +'<button class="hist-card-del" data-del="'+h.id+'" type="button">✕</button>'
+      +'<div class="hist-card-top"><div class="hist-card-name">'+nombre+'</div><div class="hist-card-date">'+h.ts+'</div></div>'
+      +'<div class="hist-card-cuota">'+fmtCLP(h.cuota)+'<span style="font-size:13px;font-weight:500;color:rgba(255,255,255,.6)">/mes</span></div>'
+      +'<div class="hist-card-sub">'+h.cuotas+' cuotas · Precio: '+fmtCLP(h.precio)+'</div>'
+      +'<div class="hist-card-pills">'+(h.proyecto?'<span class="hist-pill">📍 '+h.proyecto+'</span>':'')+(h.parcela?'<span class="hist-pill">🏷️ '+h.parcela+'</span>':'')+'<span class="hist-pill gold">Total: '+fmtCLP(h.total)+'</span></div>'
+      +'<div class="hist-restore-hint">Toca para restaurar esta simulación</div>'
+      +'</div>';
+  });
+  list.innerHTML=html;
+  list.querySelectorAll(".hist-card").forEach(function(card){
+    card.addEventListener("click",function(e){
+      if(e.target.closest("[data-del]"))return;
+      var h=historial.find(function(x){return x.id===parseInt(card.dataset.id);});
+      if(!h)return;
+      precioRaw=h.precioRaw||""+h.precio;pieMode=h.pieMode||"pct";pieRaw=h.pieRaw||""+h.pie;cuotas=h.cuotas||12;
+      proyecto=h.proyecto||"";parcela=h.parcela||"";fecha=h.fecha||"";nombreCliente=h.nombreCliente||"";
+      document.getElementById("iproyecto").value=proyecto;
+      document.getElementById("iparcela").value=parcela;
+      document.getElementById("ifecha").value=fecha;
+      document.getElementById("inombre").value=nombreCliente;
+      document.getElementById("iprecio").value=fmt(h.precio);
+      var inp=document.getElementById("ipie");
+      if(pieMode==="monto"){inp.value=fmt(h.pie);inp.placeholder="15.000.000";inp.setAttribute("inputmode","numeric");}
+      else{inp.value=pieRaw;inp.placeholder="30";inp.setAttribute("inputmode","decimal");}
+      update();window.scrollTo({top:0,behavior:"smooth"});showToast("✅ Simulación restaurada",2000);
+    });
+  });
+  list.querySelectorAll("[data-del]").forEach(function(btn){
+    btn.addEventListener("click",function(e){
+      e.stopPropagation();
+      historial=historial.filter(function(x){return x.id!==parseInt(btn.dataset.del);});
+      try{localStorage.setItem("sim_hist",JSON.stringify(historial));}catch(e){}
+      renderHistorial();
+    });
+  });
+}
+
+// BOTONES PRINCIPALES
+document.getElementById("bwsp").addEventListener("click",function(){guardarHistorial();abrirPreview();});
+document.getElementById("bdl").addEventListener("click",function(){guardarHistorial();abrirPreview();});
+document.getElementById("bmail").addEventListener("click",function(){guardarHistorial();abrirPreview();});
+
+// MODAL PREVIEW
+document.getElementById("mbtn-close").addEventListener("click",function(){document.getElementById("modal-preview").classList.remove("show");});
+document.getElementById("mbtn-dl").addEventListener("click",function(){
+  if(!lastBlob)return;
+  var d=calc();var url=URL.createObjectURL(lastBlob);
+  var a=document.createElement("a");a.href=url;a.download="simulacion-chicureo"+(proyecto?"-"+proyecto.replace(/\s+/g,"-"):"")+(parcela?"-"+parcela:"")+".png";a.click();
+  setTimeout(function(){URL.revokeObjectURL(url);},2000);showToast("✅ Imagen descargada");
+});
+document.getElementById("mbtn-wsp").addEventListener("click",function(){
+  if(!lastBlob)return;
+  var file=new File([lastBlob],"simulacion-chicureo.png",{type:"image/png"});
+  if(navigator.canShare&&navigator.canShare({files:[file]})){
+    navigator.share({files:[file],title:"Facilidad de Pago – Inmobiliaria Chicureo"})
+      .then(function(){document.getElementById("modal-preview").classList.remove("show");})
+      .catch(function(e){if(e.name!=="AbortError")compartirFallback();});
+  } else {compartirFallback();}
+});
+function compartirFallback(){
+  if(lastBlob){var url=URL.createObjectURL(lastBlob);var a=document.createElement("a");a.href=url;a.download="simulacion-chicureo.png";a.click();setTimeout(function(){URL.revokeObjectURL(url);},2000);}
+  var d=calc();
+  var txt="🌿 *Facilidad de Pago – Inmobiliaria Chicureo*\n"+(nombreCliente?"👤 "+nombreCliente+"\n":"")+(proyecto?"📍 "+proyecto+"\n":"")+(parcela?"🏷️ "+parcela+"\n":"")+(fecha?"📅 "+fmtFecha(fecha)+"\n":"")+"\n💰 *Cuota mensual: "+fmtCLP(d.cuota)+"*\n"+cuotas+" cuotas · Precio: "+fmtCLP(d.precio)+"\n\n_Adjunto la imagen con el detalle completo_";
+  var isMobile=/Android|iPhone|iPad/i.test(navigator.userAgent);
+  window.open((isMobile?"whatsapp://send?text=":"https://web.whatsapp.com/send?text=")+encodeURIComponent(txt),"_blank");
+  showToast("📥 Imagen descargada · Adjúntala en WhatsApp",4000);
+  document.getElementById("modal-preview").classList.remove("show");
+}
+document.getElementById("mbtn-mail").addEventListener("click",function(){document.getElementById("modal-preview").classList.remove("show");setTimeout(function(){document.getElementById("modal-email").classList.add("show");},200);});
+
+// MODAL EMAIL
+document.getElementById("email-cancel").addEventListener("click",function(){document.getElementById("modal-email").classList.remove("show");});
+document.getElementById("email-send").addEventListener("click",function(){
+  var to=document.getElementById("email-cliente").value.trim();
+  if(!to){showToast("⚠️ Escribe el correo del cliente");return;}
+  var from=document.getElementById("email-remitente").value.trim();
+  var d=calc();
+  if(lastBlob){var u=URL.createObjectURL(lastBlob);var a=document.createElement("a");a.href=u;a.download="simulacion-chicureo"+(proyecto?"-"+proyecto.replace(/\s+/g,"-"):"")+".png";a.click();setTimeout(function(){URL.revokeObjectURL(u);},2000);}
+  var subject=encodeURIComponent("Plan de Pago"+(proyecto?" – "+proyecto:"")+" · Inmobiliaria Chicureo");
+  var body=encodeURIComponent("Estimado/a"+(nombreCliente?" "+nombreCliente:"")+",\n\nAdjunto imagen con el detalle de tu plan de pago.\n\n"+(proyecto?"Proyecto: "+proyecto+"\n":"")+(parcela?"Unidad: "+parcela+"\n":"")+(fecha?"Fecha: "+fmtFecha(fecha)+"\n":"")+"\nCuota mensual: "+fmtCLP(d.cuota)+"\n"+cuotas+" cuotas · Precio: "+fmtCLP(d.precio)+"\n\n👆 Por favor adjunta la imagen descargada a este correo.\n\nSaludos,\nInmobiliaria Chicureo · A2 Capital");
+  window.location.href="mailto:"+to+(from?"?cc="+from+"&":"?")+"subject="+subject+"&body="+body;
+  document.getElementById("modal-email").classList.remove("show");
+  showToast("📥 Imagen descargada · Adjúntala al correo",4000);
+});
+
+// NUEVA SIMULACIÓN
+document.getElementById("bnueva").addEventListener("click",function(){
+  guardarHistorial();
+  precioRaw="";pieRaw="30";pieMode="pct";cuotas=12;proyecto="";parcela="";nombreCliente="";
+  fecha=new Date().toISOString().slice(0,10);
+  document.getElementById("iproyecto").value="";document.getElementById("iparcela").value="";
+  document.getElementById("inombre").value="";document.getElementById("ifecha").value=fecha;
+  document.getElementById("iprecio").value="";
+  var inp=document.getElementById("ipie");inp.value="30";inp.placeholder="30";inp.setAttribute("inputmode","decimal");
+  update();window.scrollTo({top:0,behavior:"smooth"});showToast("🔁 Lista para nueva simulación",2000);
+});
+
+document.getElementById("hist-clear").addEventListener("click",function(){historial=[];try{localStorage.removeItem("sim_hist");}catch(e){}renderHistorial();showToast("🗑️ Historial limpiado");});
+
+// INPUTS
+document.getElementById("bpct").addEventListener("click",function(){setMode("pct");});
+document.getElementById("bmonto").addEventListener("click",function(){setMode("monto");});
+var iprecio=document.getElementById("iprecio");
+iprecio.addEventListener("focus",function(){this.value=precioRaw?fmt(parseN(precioRaw)):"";});
+iprecio.addEventListener("input",function(){var raw=this.value.replace(/[^0-9]/g,"");precioRaw=raw;var n=parseInt(raw,10),cur=this.selectionEnd||0,oldL=this.value.length;this.value=n?fmt(n):"";var diff=this.value.length-oldL;try{this.setSelectionRange(cur+diff,cur+diff);}catch(e){}update();});
+iprecio.addEventListener("blur",function(){this.value=parseN(precioRaw)?fmt(parseN(precioRaw)):"";});
+var ipie=document.getElementById("ipie");
+ipie.addEventListener("focus",function(){if(pieMode==="monto"){var n=parseN(pieRaw);this.value=n?fmt(n):"";} });
+ipie.addEventListener("input",function(){if(pieMode==="pct"){pieRaw=this.value.replace(/[^0-9.,]/g,"");}else{var raw=this.value.replace(/[^0-9]/g,"");pieRaw=raw;var n=parseInt(raw,10),cur=this.selectionEnd||0,oldL=this.value.length;this.value=n?fmt(n):"";var diff=this.value.length-oldL;try{this.setSelectionRange(cur+diff,cur+diff);}catch(e){}}update();});
+ipie.addEventListener("blur",function(){if(pieMode==="monto"){var n=parseN(pieRaw);this.value=n?fmt(n):"";} });
+document.getElementById("iproyecto").addEventListener("input",function(){proyecto=this.value;});
+document.getElementById("iparcela").addEventListener("input",function(){parcela=this.value;});
+document.getElementById("ifecha").addEventListener("change",function(){fecha=this.value;});
+document.getElementById("inombre").addEventListener("input",function(){nombreCliente=this.value;});
+
+var ireserva=document.getElementById("ireserva");
+ireserva.addEventListener("focus",function(){this.value=reservaRaw?fmt(parseN(reservaRaw)):"";});
+ireserva.addEventListener("input",function(){
+  var raw=this.value.replace(/[^0-9]/g,"");reservaRaw=raw;
+  var n=parseInt(raw,10),cur=this.selectionEnd||0,oldL=this.value.length;
+  this.value=n?fmt(n):"";var diff=this.value.length-oldL;
+  try{this.setSelectionRange(cur+diff,cur+diff);}catch(e){}update();
+});
+ireserva.addEventListener("blur",function(){
+  if(!reservaRaw||parseN(reservaRaw)===0){reservaRaw="250000";this.value=fmt(250000);}
+  else this.value=fmt(parseN(reservaRaw));
+  update();
+});
+
+fecha=new Date().toISOString().slice(0,10);
+document.getElementById("ifecha").value=fecha;
+document.getElementById("ireserva").value=fmt(250000);
+initGrid();update();renderHistorial();
+
+</script>
+</body>
+</html>
